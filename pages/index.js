@@ -1,16 +1,47 @@
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import Head from "next/head";
 import Seo from "../components/Seo";
+import { useRouter } from "next/router";
 
 export default function Home({ results }) {
   const [counter, setCounter] = useState(0);
+  const router = useRouter();
+  const onClick = (id, title) => {
+    router.push(
+      {
+        pathname: `/movies/${id}`,
+        query: {
+          title,
+          img: movie.poster_path,
+        }, // 쿼리로 영화 정보를 넘겨줌
+      },
+      `/movies/${id}`
+    ); // 브라우저에 보여줄 url 쓰기
+  };
   return (
     <div>
       <Seo title="Home" />
       {!results && <h4>Loading...</h4>}
       {results?.map((movie) => (
-        <div key={movie.id}>
-          <h3>{movie.original_title}</h3>
+        <div
+          onClick={() => onClick(movie.id, movie.original_title)}
+          key={movie.id}
+        >
+          <Link
+            href={{
+              pathname: `/movies/${movie.id}`,
+              query: {
+                title: movie.original_title,
+                img: movie.poster_path,
+              },
+            }}
+            as={`/movies/${movie.id}`}
+          >
+            <a>
+              <h3>{movie.original_title}</h3>
+            </a>
+          </Link>
           <img src={`https://image.tmdb.org/t/p/w200/${movie.poster_path}`} />
         </div>
       ))}
