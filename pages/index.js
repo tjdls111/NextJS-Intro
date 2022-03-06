@@ -7,17 +7,8 @@ import { useRouter } from "next/router";
 export default function Home({ results }) {
   const [counter, setCounter] = useState(0);
   const router = useRouter();
-  const onClick = (id, title) => {
-    router.push(
-      {
-        pathname: `/movies/${id}`,
-        query: {
-          title,
-          img: movie.poster_path,
-        }, // 쿼리로 영화 정보를 넘겨줌
-      },
-      `/movies/${id}`
-    ); // 브라우저에 보여줄 url 쓰기
+  const onClick = (id, title, img) => {
+    router.push(`/movies/${title}/${id}`);
   };
   return (
     <div>
@@ -25,19 +16,12 @@ export default function Home({ results }) {
       {!results && <h4>Loading...</h4>}
       {results?.map((movie) => (
         <div
-          onClick={() => onClick(movie.id, movie.original_title)}
+          onClick={() =>
+            onClick(movie.id, movie.original_title, movie.poster_path)
+          }
           key={movie.id}
         >
-          <Link
-            href={{
-              pathname: `/movies/${movie.id}`,
-              query: {
-                title: movie.original_title,
-                img: movie.poster_path,
-              },
-            }}
-            as={`/movies/${movie.id}`}
-          >
+          <Link href={`/movies/${movie.original_title}/${movie.id}`}>
             <a>
               <h3>{movie.original_title}</h3>
             </a>
@@ -59,6 +43,7 @@ export async function getServerSideProps() {
   const { results } = await (
     await fetch(`http://localhost:3000/api/movies`)
   ).json();
+
   return {
     props: { results },
   };

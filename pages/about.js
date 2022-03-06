@@ -6,7 +6,7 @@ export default function Apple() {
   return (
     <div>
       <Seo title="about" />
-      <h1>👩‍💻 노마드 코더 - Next 기초 강의~~👩‍💻</h1>
+      <h1>👩‍💻 노마드 코더 - Next 기초 강의 👩‍💻</h1>
     </div>
   );
 }
